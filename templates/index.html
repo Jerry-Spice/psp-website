@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <title>PSP at VT</title>
+        <link
+            rel="stylesheet"
+            href="{{ url_for( 'static', filename='index.css') }}"
+        />
+    </head>
+    <body>
+        <div class="header">
+            <h1>Phi Sigma Phi at Virginia Tech</h1>
+        </div>
+        <div class="linkrow">
+            <div><a href="/home">Home</a></div>
+            <div><a href="/calendar">Calendar</a></div>
+            <div><a href="/announcements">Announcements</a></div>
+            <div><a href="/events">Events</a></div>
+            <div><a href="/admin">Admin</a></div>
+        </div>
+        <div class="mainarea">
+            <div class="horizontal-row-flex">
+                <div class="calendar">
+                    <h1>Calendar</h1>
+                    <div class="days-container">
+                        {% if day_count %} {% for day in range(day_count) %}
+                        {% if (day % 7 == 0 and day != 0) %}
+                        </div>
+                        {% endif %}
+                        {% if day % 7 == 0 %}
+                        <div class="week-container">
+                        {% endif %}
+                            <div id="day-{{ day +1  }}" class="day">
+                                <h2>{{ day+1 }}</h2>
+                            </div>
+                        {% if day == day_count - 1 %}
+                        </div>
+                        {% endif %}
+                        {% endfor %} {% endif %}
+                    </div>
+                </div>
+                <div class="announcements">
+                    <h1>Announcements</h1>
+                    <div class="announcement">
+                        <h2>Title</h2>
+                        <p>Short content</p>
+                    </div>
+                    <div class="announcement">
+                        <h2>Title</h2>
+                        <p>Short content</p>
+                    </div>
+                    <div class="announcement">
+                        <h2>Title</h2>
+                        <p>Short content</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer"></div>
+    </body>
+</html>

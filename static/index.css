@@ -1,0 +1,88 @@
+body {
+    margin: 0px;
+    padding: 0px;
+}
+.header {
+    border-bottom: darkslategrey 5px solid;
+    background-color: darkviolet;
+    padding: 2vh 0.5vw;
+}
+
+.header * {
+    margin: 0px;
+}
+
+.linkrow {
+    border-bottom: darkslategrey 5px solid;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    font-size: 25px;
+}
+
+.linkrow div a {
+    color: white;
+}
+
+.linkrow div a:visited {
+    color: grey;
+}
+
+.mainarea {
+    padding: 20px 0px;
+}
+
+.horizontal-row-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.calendar {
+    border: solid 5px black;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.days-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.week-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+}
+
+.day {
+    margin: -1px;
+    padding: 0px 5px;
+    border: solid 2px black;
+
+    min-width: 150px;
+    min-height: 150px;
+}
+
+.announcements {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.announcements h1 {
+    border-bottom: solid darkviolet 5px;
+    padding: 0px 10px;
+}
+
+.announcement {
+    border: solid 2px grey;
+    border-radius: 8px;
+    margin: 5px 0px;
+    padding: 0px 4px;
+}
+
+.announcement h2 {
+    text-align: center;
+}
