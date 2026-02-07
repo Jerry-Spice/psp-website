@@ -3,7 +3,7 @@ import markdown
 class Event(object):
     def __init__(self, name, description, date, time, point_kind, attendance_before, attendance_after):
         self.name = name
-        self.description = markdown.markdown(description.replace("\n","<br>"))
+        self.description = description
         self.date = date
         self.time = time
         self.point_kind = point_kind

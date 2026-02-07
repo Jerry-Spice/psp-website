@@ -5,6 +5,10 @@
             rel="stylesheet"
             href="{{ url_for( 'static', filename='index.css') }}"
         />
+        <link
+            rel="stylesheet"
+            href="{{ url_for( 'static', filename='dashboard.css') }}"
+        />
     </head>
     <body>
         <div class="header">
@@ -20,8 +24,9 @@
         <div class="mainarea">
             <div class="horizontal-row-flex">
                 <div class="announcements">
-                    {% if announcements != None%}
+                    {% if announcements != None %}
                     {% for announcement in announcements %}
+                    <a class="undecorated-link" href="/admin/edit-announcement/{{ announcement.title|replace(' ','-') }}">
                     <div class="announcement">
                         <div class="announcement-row">
                         <h2>{{ announcement.title }}</h2>
@@ -33,6 +38,7 @@
                         </div>
                         <p>{{ announcement.content|safe }}</p>
                     </div>
+                    </a>
                     {% endfor %}
                     {% endif %}
                 </div>

@@ -5,24 +5,28 @@
             rel="stylesheet"
             href="{{ url_for( 'static', filename='event.css') }}"
         />
+        <link
+            rel="stylesheet"
+            href="{{ url_for( 'static', filename='dashboard.css') }}"
+        />
     </head>
     <body>
         <div class="header">
-                <h1>Phi Sigma Phi at Virginia Tech</h1>
+                <h1>Event Editor</h1>
             </div>
-            <div class="linkrow">
+        </div>
+        <div class="linkrow">
                 <div><a href="/">Home</a></div>
                 <div><a href="/calendar">Calendar</a></div>
                 <div><a href="/announcements">Announcements</a></div>
                 <div><a href="/events">Events</a></div>
                 <div><a href="/admin">Admin</a></div>
             </div>
-        </div>
         <div class="mainarea">
             {% if event_data != None %}
             <h1 class="title">{{ event_data.name }}</h1>
             <div class="description">
-                {{ event_data.description|safe }}
+                {{ formatted_description|safe }}
             </div>
             {% endif %}
         </div>

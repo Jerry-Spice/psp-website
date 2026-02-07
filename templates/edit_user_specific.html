@@ -1,0 +1,103 @@
+<html>
+    <head>
+        <title>PSP at VT</title>
+        <link
+            rel="stylesheet"
+            href="{{ url_for( 'static', filename='dashboard.css') }}"
+        />
+    </head>
+    <body>
+        <div class="header">
+            <h1>Admin Dashboard - Welcome {{ username }}</h1>
+        </div>
+        <div class="linkrow">
+            <div><a href="/">Home</a></div>
+            <div><a href="/calendar">Calendar</a></div>
+            <div><a href="/announcements">Announcements</a></div>
+            <div><a href="/events">Events</a></div>
+            <div><a href="/admin">Admin</a></div>
+            <div><a href="/admin/dashboard">Dashboard</a></div>
+        </div>
+        <div class="mainarea">
+            <div class="two-column">
+            <div>
+                <form method="POST" action="/admin/edit-user/{{ user[0] }}/process">
+                    <table>
+                        <tr>
+                            <td>
+                                <input id="username" type="text" name="username" value="{{ user[0] }}" placeholder="Username..." />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input id="password1" type="text" name="password" value="{{ user[1] }}" placeholder="Password..." />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input id="password2" type="text" placeholder="Confirm Password..." />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input id="mode" name="mode" type="number" value="{{ user[2] }}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button id="submitbtn" type="submit">Save Changes</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div>
+                <h1>Instructions</h1>
+                <p>This page will build an event based on the information you pass in.</p>
+                <p>
+                    <strong>First Box</strong>
+                    The first box is your username. The only thing your username cannot have are spaces.
+
+                </p>
+                <p>
+                    <strong>Second and Third Boxes</strong>
+                    The second box is your password. The only requirement for your password is that it must match what you type in the third box as well. 
+                </p>
+                <p>
+                    <strong>Fourth Box</strong>
+                    This fourth box can only be edited by users with a mode of 1. If you have a mode of 2 and try to edit this box. Nothing will happen.
+                    Similarly only users with a mode of 0 can delete users.
+                </p>
+                
+            </div>
+        </div>
+        </div>
+        <div class="footer"></div>
+        <script>
+        var username = document.getElementById("username");
+        var password1 = document.getElementById("password1");
+        var password2 = document.getElementById("password2");
+        var mode = document.getElementById("mode");
+        var submitbtn = document.getElementById("submitbtn");
+
+        submitbtn.disabled = true;
+
+        function verifyPassword() {
+            if (password1.value == password2.value && password1.value != "" && !username.value.includes(" ")) {
+                submitbtn.disabled = false;
+            } else {
+                submitbtn.disabled = true;
+            }
+        }
+
+        function verifyMode() {
+            if (mode.value < 1) {
+                mode.value = 1;
+            }
+        }
+
+        setInterval(verifyPassword, 100);
+        setInterval(verifyMode, 100);
+    </script>
+    </body>
+</html>

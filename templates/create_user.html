@@ -24,7 +24,7 @@
                     <table>
                         <tr>
                             <td>
-                                <input type="text" name="username" placeholder="Username..." />
+                                <input id="username" type="text" name="username" placeholder="Username..." />
                             </td>
                         </tr>
                         <tr>
@@ -39,7 +39,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <button id="submitbtn" type="submit">Create Announcement</button>
+                                <button id="submitbtn" type="submit">Create User</button>
                             </td>
                         </tr>
                     </table>
@@ -50,17 +50,12 @@
                 <p>This page will build an event based on the information you pass in.</p>
                 <p>
                     <strong>First Box</strong>
-                    The first box is the title of the announcement. This will appear larger than the description text below.
+                    The first box is your username. The only thing your username cannot have are spaces.
 
                 </p>
                 <p>
-                    <strong>Second Box</strong>
-                    The second box is for the announcement's description. Write some general details about the announcement including
-                    information like meeting place, items needed by members, etc.
-                    This box is going to be formatted using the <a
-                        href="https://www.markdownguide.org/basic-syntax/">Markdown</a> formatting langauge. This
-                    lanugage is similar to HTML and will allow you to format the description however you want. Note
-                    markdown also accepts raw HTML and CSS in case you want to style the description in a fancy way.
+                    <strong>Second and Third Boxes</strong>
+                    The second box is your password. The only requirement for your password is that it must match what you type in the third box as well. 
                 </p>
                 
             </div>
@@ -68,6 +63,7 @@
     </div>
     <div class="footer"></div>
     <script>
+        var username = document.getElementById("username");
         var password1 = document.getElementById("password1");
         var password2 = document.getElementById("password2");
         var submitbtn = document.getElementById("submitbtn");
@@ -75,7 +71,7 @@
         submitbtn.disabled = true;
 
         function verifyPassword() {
-            if (password1.value == password2.value && password1.value != "") {
+            if (password1.value == password2.value && password1.value != "" && !username.value.includes(" ")) {
                 submitbtn.disabled = false;
             } else {
                 submitbtn.disabled = true;

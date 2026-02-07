@@ -25,9 +25,11 @@ class Herald(object):
             )
     
     def add_announcement(self, new_announcement):
-        
         self.announcements.append(new_announcement)
+        self.update_files()
+        
 
+    def update_files(self):
         announcements_dict = {
             "announcements": []
         }

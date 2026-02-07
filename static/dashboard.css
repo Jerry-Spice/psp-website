@@ -157,3 +157,51 @@ body {
 .two-column div {
     width: 50%;
 }
+
+.users {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.user {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    border: solid 2px black;
+    border-radius: 10px;
+    padding: 0px 30px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.user * {
+    padding: 0px 10px;
+}
+
+.actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.action-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.action-column * {
+    margin: 50px 0px;
+    font-size: 50px;
+}
+
+.logout-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.logout {
+    font-size: 50px;
+}

@@ -1,7 +1,9 @@
+import markdown
+
 class Announcement(object):
     def __init__(self, title, content, date, time, user):
         self.title = title
-        self.content = content
+        self.content = markdown.markdown(content)
         self.date = date
         self.time = time
         self.user = user

@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <title>PSP at VT</title>
+        <link
+            rel="stylesheet"
+            href="{{ url_for( 'static', filename='event.css') }}"
+        />
+        <link
+            rel="stylesheet"
+            href="{{ url_for( 'static', filename='dashboard.css') }}"
+        />
+    </head>
+    <body>
+        <div class="header">
+            <h1>Edit Events</h1>
+        </div>
+        <div class="linkrow">
+            <div><a href="/">Home</a></div>
+            <div><a href="/calendar">Calendar</a></div>
+            <div><a href="/announcements">Announcements</a></div>
+            <div><a href="/events">Events</a></div>
+            <div><a href="/admin">Admin</a></div>
+            <div><a href="/admin/dashboard">Dashboard</a></div>
+        </div>
+        <div class="mainarea">
+            <h1>Choose an event to edit</h1>
+            {% if events != None %}
+                {% for i in range(events|length) %}
+                {% if i % 2 == 0 and i != 0 %}
+                </div>
+                {% endif %}
+                {% if i % 2 == 0 %}
+                <div class="event-row">
+                {% endif %}
+                    <a class="undecorated-link" href="/admin/edit-event/{{ events[i].name | replace(' ', '-') }}">
+                    <div class="event">
+                        <div class="event-row-content">
+                            <h1>{{ events[i].name }}</h1>
+                            <div>
+                                <h2>{{ events[i].date }}</h2>
+                                <h2>{{ events[i].time }}</h2>
+                            </div>
+                        </div>
+                        <h3>Point: {{ events[i].point_kind|capitalize }}</h3>
+                        <p>{{ events[i].description|safe }}</p>
+                    </div>
+                    </a>
+                {% endfor %}
+                {% if events|length % 2 == 1 %}
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="footer"></div>
+        <script>
+            var events = document.getElementsByClassName("event");
+            var max_size = 0;
+            for (let i = 0; i < events.length; i++) {
+                if (events[i].offsetWidth > max_size) {
+                    max_size = events[i].offsetWidth;
+                }
+            }
+            for (let i = 0; i < events.length; i++) {
+                events[i].style.width = max_size + "px";
+            }
+        </script>
+    </body>
+</html>

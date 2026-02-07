@@ -19,22 +19,17 @@
             <div><a href="/admin/dashboard">Dashboard</a></div>
         </div>
         <div class="mainarea">
-            <div class="actions">
-                <div class="action-column">
-                <a href="/admin/create-event">Create Event</a>
-                <a href="/admin/edit-event">Edit Event</a>
+            <div class="horizontal-row-flex">
+                <div class="users">
+            {% for user in users %}
+                <a class="undecorated-link" href="/admin/edit-user/{{ user[0] }}">
+                <div class="user">
+                    <h1>{{ user[0] }}</h1>
+                    <p>Mode: {{ user[2] }}</p>
                 </div>
-                <div class="action-column">
-                <a href="/admin/create-announcement">Create Announcement</a>
-                <a href="/admin/edit-announcement">Edit Announcement</a>
+                </a>
+            {% endfor %}
                 </div>
-                <div class="action-column">
-                <a href="/admin/create-user">Create User</a>
-                <a href="/admin/edit-user">Edit User</a>
-                </div>
-            </div>
-            <div class="logout-section">
-            <a class="logout" href="/admin/logout">Logout</a>
             </div>
         </div>
         <div class="footer"></div>
