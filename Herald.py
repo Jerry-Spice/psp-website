@@ -24,6 +24,19 @@ class Herald(object):
                 )
             )
     
+    def add_announcement(self, new_announcement):
+        
+        self.announcements.append(new_announcement)
+
+        announcements_dict = {
+            "announcements": []
+        }
+        for announcement in self.announcements:
+            announcements_dict["announcements"].append(announcement.toJSON())
+        with open(self.announcements_file, "w") as f:
+            f.write(json.dumps(announcements_dict))
+            f.close()
+
     def __str__(self):
         msg = "["
         for announcement in self.announcements:

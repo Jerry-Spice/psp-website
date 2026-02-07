@@ -1,0 +1,98 @@
+<html>
+
+<head>
+    <title>PSP at VT</title>
+    <link rel="stylesheet" href="{{ url_for( 'static', filename='dashboard.css') }}" />
+</head>
+
+<body>
+    <div class="header">
+        <h1>Create Event</h1>
+    </div>
+    <div class="linkrow">
+        <div><a href="/">Home</a></div>
+        <div><a href="/calendar">Calendar</a></div>
+        <div><a href="/announcements">Announcements</a></div>
+        <div><a href="/events">Events</a></div>
+        <div><a href="/admin">Admin</a></div>
+        <div><a href="/admin/dashboard">Dashboard</a></div>
+    </div>
+    <div class="mainarea">
+        <div class="two-column">
+            <div>
+                <form method="POST" action="/admin/create-event/process">
+                    <table>
+                        <tr>
+                            <td colspan="2">
+                                <input type="text" name="name" placeholder="Event name..." />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <textarea name="description" placeholder="Event description..." rows="20" cols="100"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="time" name="time" />
+                            </td>
+                            <td>
+                                <input type="date" name="date" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <select name="point_kind">
+                                    <option value="N/A">N/A</option>
+                                    <option value="fellowship">Fellowship</option>
+                                    <option value="leadership">Leadership</option>
+                                    <option value="scholarship">Scholarship</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <button type="submit" >Create Event</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div>
+                <h1>Instructions</h1>
+                <p>This page will build an event based on the information you pass in.</p>
+                <p>
+                    <strong>First Box</strong>
+                    The first box is the name of the
+                    event. This should ideally be something short and quick to read so that brothers can identify it
+                    quickly on the calendar. For longer pieces of information continue to the second box.
+
+                </p>
+                <p>
+                    <strong>Second Box</strong>
+                    The second box is for the event's description. Write some general details about the event including
+                    potential information like meeting place, items needed by members, etc.
+                    This box is going to be formatted using the <a
+                        href="https://www.markdownguide.org/basic-syntax/">Markdown</a> formatting langauge. This
+                    lanugage is similar to HTML and will allow you to format the description however you want. Note
+                    markdown also accepts raw HTML and CSS in case you want to style the description in a fancy way.
+                </p>
+                <p>
+                    <strong>Third and Fourth Boxes</strong>
+                    The third and fourth boxes are time and date accordingly these will appear on the event's card in
+                    the calendar and it will affect how it appears on the calendar. Make sure you enter the date
+                    correctly and double check the calendar to make sure it was created properly.
+                </p>
+                <p>
+                    <strong>Fifth Box (dropdown)</strong>
+                    This dropdown determines what point will be awarded for brothers that go to the event. It defaults
+                    to "N/A" because that is more often then not what will be awarded for events like weekly chapter.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="footer"></div>
+
+</body>
+
+</html>

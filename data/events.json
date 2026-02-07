@@ -2,23 +2,48 @@
     "events": [
         {
             "name": "Family Feud",
-            "description": "Just a simple game of **Family Feud**\n## Rules\nThe rules are simple. Just play normal family feud.",
+            "description": "<p>Just a simple game of <strong>Family Feud</strong></p>\n<h2>Rules</h2>\n<p>The rules are simple. Just play normal family feud.</p>",
             "date": "2/6/2026",
             "time": "5:30pm",
             "point_kind": "fellowship",
             "attendance_before": {
-                "yes": ["Josh", "Marissa", "Olivia"],
-                "maybe": ["Malin", "Hayden", "Karla"],
-                "no": ["Will", "Maggie", "Kamryn"]
+                "yes": [
+                    "Josh",
+                    "Marissa",
+                    "Olivia"
+                ],
+                "maybe": [
+                    "Malin",
+                    "Hayden",
+                    "Karla"
+                ],
+                "no": [
+                    "Will",
+                    "Maggie",
+                    "Kamryn"
+                ]
             },
             "attendance_after": {
-                "yes": ["Josh", "Marissa", "Malin", "Karla"],
-                "no": ["Will", "Maggie", "Kamryn", "Olivia", "Hayden"]
+                "yes": [
+                    "Josh",
+                    "Marissa",
+                    "Olivia"
+                ],
+                "maybe": [
+                    "Malin",
+                    "Hayden",
+                    "Karla"
+                ],
+                "no": [
+                    "Will",
+                    "Maggie",
+                    "Kamryn"
+                ]
             }
         },
         {
             "name": "Chapter",
-            "description": "Weekly chapter",
+            "description": "<p>Weekly chapter</p>",
             "date": "2/8/2026",
             "time": "3:30pm",
             "point_kind": "N/A",
@@ -29,12 +54,13 @@
             },
             "attendance_after": {
                 "yes": [],
+                "maybe": [],
                 "no": []
             }
         },
         {
             "name": "Initiate Chapter",
-            "description": "Weekly chapter",
+            "description": "<p>Weekly chapter for initiates</p>",
             "date": "2/8/2026",
             "time": "4:30pm",
             "point_kind": "N/A",
@@ -45,6 +71,24 @@
             },
             "attendance_after": {
                 "yes": [],
+                "maybe": [],
+                "no": []
+            }
+        },
+        {
+            "name": "safasdfs",
+            "description": "<p>asdfnjkasldnfjasdnfjklsadf</p>",
+            "date": "2/11/2026",
+            "time": "12:00AM",
+            "point_kind": "N/A",
+            "attendance_before": {
+                "yes": [],
+                "maybe": [],
+                "no": []
+            },
+            "attendance_after": {
+                "yes": [],
+                "maybe": [],
                 "no": []
             }
         }

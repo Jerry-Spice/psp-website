@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <title>PSP at VT</title>
+        <link
+            rel="stylesheet"
+            href="{{ url_for( 'static', filename='login.css') }}"
+        />
+    </head>
+    <body>
+        <div class="header">
+            <h1>Admin Log In</h1>
+        </div>
+        <div class="linkrow">
+            <div><a href="/">Home</a></div>
+            <div><a href="/calendar">Calendar</a></div>
+            <div><a href="/announcements">Announcements</a></div>
+            <div><a href="/events">Events</a></div>
+            <div><a href="/admin">Admin</a></div>
+        </div>
+        <div class="mainarea">
+            <div class="center-vertical">
+                <div class="center-horizontal">
+                    <div class="login-form">
+                        <form method="POST" action="/admin/verification">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <input type="text" name="username" placeholder="Username...">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="password" name="password" placeholder="Password...">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="submit" value="Log In">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                        {% if failure %}
+                        <p style="color: red">Your user name or password is incorrect.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer"></div>
+        
+    </body>
+</html>

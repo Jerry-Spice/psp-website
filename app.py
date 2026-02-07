@@ -1,19 +1,25 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, session, redirect
 import os
 
 import datetime, calendar
 
 from Maggie import Maggie
 from Herald import Herald
+from configmanager import ConfigManager
+from Event import Event
+from Announcement import Announcement
 
 app = Flask(__name__)
+app.secret_key = ConfigManager("key.cfg").get_key()
+users = ConfigManager("./data/users.cfg").get_key().split("\n")
+for i in range(len(users)):
+    users[i] = users[i].split(",")
 
 maggie = Maggie("./data/events.json")
 herald = Herald("./data/announcements.json")
 
 @app.route("/")
 def index():
-
     ## CALCULATE CALENDAR STRUCTURE - days & month & which day the month starts on
     calendar_monthrange = calendar.monthrange(datetime.datetime.now().year, datetime.datetime.now().month) # returns a tuple
     first_day_of_month = calendar_monthrange[0] # Calendar.<CONSTANT IN ALL CAPS> use a switch statement
@@ -113,9 +119,127 @@ def event_render(event_name):
     for e in maggie.events:
         if e.name.replace(" ", "-") == event_name:
             event = e
-    if event == None or "event-" + event_name + ".html" not in os.listdir("./templates/events"):
-        return render_template("events/unknown-event.html")
-    return render_template("events/event-" + event_name+".html", event_data=event)
+    return render_template("events/event-template.html", event_data=event)
+
+@app.route("/admin")
+def admin_login():
+    if "username" in session:
+        return redirect("/admin/dashboard")
+    if "error" not in session:
+        session["error"] = False
+    return render_template("login.html", failure=session["error"])
+
+@app.route("/admin/verification", methods=["GET", "POST"])
+def admin_verification():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        for user in users:
+            if user[0] == username and user[1] == password and int(user[2]) < 2:
+                session["username"] = username
+                session["error"] = False
+                return redirect("/admin/dashboard", code=302)
+    session["error"] = True
+    return redirect("/admin", code=302)
+
+@app.route("/admin/dashboard")
+def admin_dashboard():
+    if "username" in session:
+        return render_template("dashboard.html", username=session["username"])
+    return redirect("/", code=302)
+
+@app.route("/admin/create-event")
+def create_event():
+    if "username" in session:
+        return render_template("create_event.html")
+    return redirect("/")
+
+@app.route("/admin/create-event/process", methods=["GET", "POST"])
+def create_event_process():
+    if "username" in session:
+        if request.method == "POST":
+            print(request.form)
+            name = request.form["name"]
+            description = request.form["description"]
+            date = request.form["date"]
+            time = request.form["time"]
+            point_kind = request.form["point_kind"]
+            attendance_before = {"yes": [], "maybe": [], "no": []}
+            attendance_after = {"yes": [], "no": []}
+            hour = int(time.split(":")[0])
+            minute = time.split(":")[1]
+            mode = "AM"
+            if hour < 12:
+                mode = "AM"
+            else:
+                mode = "PM"
+                hour -= 12
+            if hour == 0:
+                    hour = 12
+            year = int(date.split("-")[0])
+            month = int(date.split("-")[1])
+            day = int(date.split("-")[2])
+            maggie.add_event(Event(name, description, str(month)+"/"+str(day)+"/"+str(year), str(hour)+":"+str(minute)+str(mode), point_kind, attendance_before, attendance_after))
+            return redirect("/admin/dashboard", code=302)
+        return redirect("/admin/dashboard", code=302)
+    return redirect("/")
+
+@app.route("/admin/create-announcement")
+def create_announcement():
+    if "username" in session:
+        return render_template("create_announcement.html")
+    return redirect("/")
+
+@app.route("/admin/create-announcement/process", methods=["GET", "POST"])
+def create_announcement_process():
+    if "username" in session:
+        if request.method == "POST":
+            title = request.form["title"]
+            description = request.form["description"]
+            day = datetime.datetime.now().day
+            month = datetime.datetime.now().month
+            year = datetime.datetime.now().year
+            hour = datetime.datetime.now().hour
+            minutes = datetime.datetime.now().minute
+            mode = "AM"
+            mode = "AM"
+            if hour < 12:
+                mode = "AM"
+            else:
+                mode = "PM"
+                hour -= 12
+            if hour == 0:
+                    hour = 12
+            if minutes < 10:
+                minutes = "0" + str(minutes)
+            else:
+                minutes = str(minutes)
+            user = session["username"]
+            herald.add_announcement(Announcement(title, description, str(month) + "/" + str(day) + "/" + str(year), str(hour) + ":" + str(minutes) + str(mode), str(user)))
+            return redirect("/admin/dashboard")
+        return redirect("/admin/dashboard")
+    return redirect("/")
+
+@app.route("/admin/create-user")
+def create_user():
+    if "username" in session:
+        return render_template("create_user.html")
+    return redirect("/")
+
+@app.route("/admin/create-user/process", methods=["GET","POST"])
+def create_user_process():
+    if "username" in session:
+        if request.method == "POST":
+            username = request.form["username"]
+            password = request.form["password"]
+            with open("./data/users.cfg", "a+") as f:
+                f.write(str(username) + "," + str(password) + ",3\n")
+                f.close()
+            global users
+            users.append([str(username), str(password), str(3)])
+            return redirect("/admin/dashboard")
+        return redirect("/admin/dashboard")
+    return redirect("/")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)

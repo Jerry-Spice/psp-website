@@ -28,6 +28,17 @@ class Maggie(object):
                 )
             )
     
+    def add_event(self, new_event):
+        self.events.append(new_event)
+        events_dict = {
+            "events": []
+        }
+        for event in self.events:
+            events_dict["events"].append(event.toJSON())
+        with open(self.events_file, "w") as f:
+            f.write(json.dumps(events_dict))
+            f.close()
+
     def __str__(self):
         msg = "["
         for event in self.events:

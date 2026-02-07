@@ -6,5 +6,14 @@ class Announcement(object):
         self.time = time
         self.user = user
     
+    def toJSON(self):
+        return {
+            "title": self.title,
+            "content": self.content,
+            "date": self.date,
+            "time": self.time,
+            "user": self.user
+        }
+
     def __str__(self):
         return self.title + " @" + self.date + "|" + self.time + "|by: " + self.user + "\n" + self.content 

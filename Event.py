@@ -3,7 +3,7 @@ import markdown
 class Event(object):
     def __init__(self, name, description, date, time, point_kind, attendance_before, attendance_after):
         self.name = name
-        self.description = markdown.markdown(description)
+        self.description = markdown.markdown(description.replace("\n","<br>"))
         self.date = date
         self.time = time
         self.point_kind = point_kind
@@ -18,6 +18,18 @@ class Event(object):
 
     def get_date_year(self):
         return self.date.split("/")[2]
+
+    def toJSON(self):
+        return {
+            "name": self.name,
+            "description": self.description,
+            "date": self.date,
+            "time": self.time,
+            "point_kind": self.point_kind,
+            "attendance_before": self.attendance_before,
+            "attendance_after": self.attendance_before
+        }
+
 
     def __str__(self):
         return self.name + " @" + self.date + "|" + self.time + "]\n" + self.description + "\n" + self.point_kind + "\n" + str(self.attendance_before) + "\n" + str(self.attendance_after)
