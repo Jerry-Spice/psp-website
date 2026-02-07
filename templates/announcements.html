@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <title>PSP at VT</title>
+        <link
+            rel="stylesheet"
+            href="{{ url_for( 'static', filename='index.css') }}"
+        />
+    </head>
+    <body>
+        <div class="header">
+            <h1>Phi Sigma Phi at Virginia Tech</h1>
+        </div>
+        <div class="linkrow">
+            <div><a href="/">Home</a></div>
+            <div><a href="/calendar">Calendar</a></div>
+            <div><a href="/announcements">Announcements</a></div>
+            <div><a href="/events">Events</a></div>
+            <div><a href="/admin">Admin</a></div>
+        </div>
+        <div class="mainarea">
+            <div class="horizontal-row-flex">
+                <div class="announcements">
+                    <h1>Announcements</h1>
+                    {% if announcements != None%}
+                    {% for announcement in announcements %}
+                    <div class="announcement">
+                        <div class="announcement-row">
+                        <h2>{{ announcement.title }}</h2>
+                        <h3>{{ announcement.date }}</h3>
+                        </div>
+                        <div class="announcement-row">
+                        <h3>{{ announcement.user }}</h3>
+                        <h3>{{ announcement.time }}</h3>
+                        </div>
+                        <p>{{ announcement.content }}</p>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="footer"></div>
+    </body>
+</html>

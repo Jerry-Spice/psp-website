@@ -32,7 +32,8 @@ body {
 }
 
 .mainarea {
-    padding: 20px 10px;
+    margin: 0px 20px;
+    padding: 20px 0px;
 }
 
 .horizontal-row-flex {
@@ -102,7 +103,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: start;
-    margin-left: 20px;
 }
 
 .announcements h1 {
@@ -117,17 +117,25 @@ body {
     padding: 0px 4px;
 }
 
-.announcement-row {
+.announcement h2 {
+    text-align: center;
+}
+
+.event {
+    border: solid 2px black;
+    border-radius: 8px;
+    padding: 0px 20px;
+    margin: 10px 0px;
+}
+
+.event-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.event-row-content {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-}
-
-.announcement-row * {
-    padding: 0px;
-    margin: 0px;
-}
-
-.announcement h2 {
-    text-align: center;
 }

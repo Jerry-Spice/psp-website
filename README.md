@@ -11,11 +11,14 @@ This website requires the following functionality to meet the fraternity's needs
 6. Announcements
 7. Unified points tracking
 8. Login Capability
+9. Polls (Marissa's request)
 
 ## Breakdown
 
 Content will be organized into **events**; each event will have its own page accessible via a URL.
 Each event will include a time, location, short description, and attendance. An event page can include whatever content the event creator wants. Any admin user can edit an event's page. There is no ownership of content created on this website.
+Events will support the Markdown language for formatting text.
+
 
 Attendance before an event happens will be an area for brothers to mark if they are coming, potentially coming, or not coming.
 Attendance after an event will allow admins (exec & others) to mark who attended. 
@@ -27,3 +30,4 @@ Clicking an event's label in the calendar opens a small pop-up with key details 
 The Events board will be similar to the calendar but will just be a list of events in chronological order. The calendar can occasionally be hard to read, but it will look similar to the "Agenda" view on Canvas.
 
 The Announcements section will display recent announcements compiled by admins. There will be a page for Admins to send announcements.
+
