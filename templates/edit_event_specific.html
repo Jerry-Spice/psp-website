@@ -109,7 +109,7 @@
         </div>
     </div>
     <div class="footer">
-        <form method="POST" action="/admin/edit-event/{{ event_data.name }}/delete">
+        <form method="POST" action="/admin/edit-event/{{ event_data.name|replace(' ','-') }}/delete">
             <button type="submit">Delete Event</button>
         </form>
     </div>
