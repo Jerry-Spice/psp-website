@@ -210,15 +210,35 @@ def edit_event_specific(event_name):
                 event = e
                 time_formatted = ""
                 date_formatted = ""
-                if "pm" in event.time.lower():
-                    hour = str(int(event.time[0:-2].split(":")[0]) + 12)
+                """if "pm" in event.time.lower():
+                    if int(event.time[0:-2].split(":")[0]) != 12:
+                        hour = str(int(event.time[0:-2].split(":")[0]) + 12)
+                    else: 
+                        hour = "12"
                     minute = event.time[0:-2].split(":")[1]
                     time_formatted = hour + ":" + minute
                 else:
-                    hour = event.time[0:-2].split(":")[0]
+                    if int(event.time[0:-2].split(":")[0]) == 12:
+                        hour = "00"
+                    else:
+                        hour = event.time[0:-2].split(":")[0]
                     minute = event.time[0:-2].split(":")[1]
-                    time_formatted = hour + ":" + minute
+                    time_formatted = hour + ":" + minute"""
+                
+                hour = int(event.time[0:-2].split(":")[0])
+                minute = int(event.time[0:-2].split(":")[1])
+                if "pm" in event.time.lower():
+                    hour += 12
+                hour %= 24
 
+                if hour < 10:
+                    time_formatted+="0"
+                time_formatted+=str(hour)+":"
+                if minute < 10:
+                    time_formatted += "0"
+                time_formatted+=str(minute)
+
+                print(time_formatted)
                 day = event.date.split("/")[1]
                 month = event.date.split("/")[0]
                 year = event.date.split("/")[2]
