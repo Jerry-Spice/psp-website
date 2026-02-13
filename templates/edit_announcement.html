@@ -26,7 +26,7 @@
                 <div class="announcements">
                     {% if announcements != None %}
                     {% for announcement in announcements %}
-                    <a class="undecorated-link" href="/admin/edit-announcement/{{ announcement.title|replace(' ','-') }}">
+                    <a class="undecorated-link" href="/admin/edit-announcement/{{ announcement.title|replace(' ','-') | replace('/', '&') }}">
                     <div class="announcement">
                         <div class="announcement-row">
                         <h2>{{ announcement.title }}</h2>

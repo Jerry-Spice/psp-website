@@ -56,7 +56,7 @@
                                 </div>
                                 <div class="day-content">
                                     {% for event in events[day - first_of_month] %}
-                                    <a class="undecorated-link" href="/events/{{ event.name | replace(' ', '-') }}">
+                                    <a class="undecorated-link" href="/events/{{ event.name | replace(' ', '-') | replace('/', '&') }}">
                                     <div class="calendar-event">
                                         <p><strong>{{ event.time }}</strong></p>
                                         <p>{{ event.name }}</p>

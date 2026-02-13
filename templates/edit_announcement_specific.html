@@ -20,7 +20,7 @@
     <div class="mainarea">
         <div class="two-column">
             <div>
-                <form method="POST" action="/admin/edit-announcement/{{ announcement.title|replace(' ', '-') }}/process">
+                <form method="POST" action="/admin/edit-announcement/{{ announcement.title|replace(' ', '-') | replace('/', '&') }}/process">
                     <table>
                         <tr>
                             <td>
@@ -62,7 +62,7 @@
         </div>
     </div>
     <div class="footer">
-        <form method="POST" action="/admin/edit-announcement/{{ announcement.title|replace(' ', '-') }}/delete">
+        <form method="POST" action="/admin/edit-announcement/{{ announcement.title|replace(' ', '-') | replace('/', '&') }}/delete">
             <button type="submit">Delete Announcement</button>
         </form>
     </div>

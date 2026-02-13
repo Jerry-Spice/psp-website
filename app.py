@@ -118,7 +118,7 @@ def events_view():
 def event_render(event_name):
     event = None
     for e in maggie.events:
-        if e.name.replace(" ", "-") == event_name:
+        if e.name.replace(" ", "-").replace("/","&") == event_name:
             event = e
             formatted_description = markdown.markdown(event.description)
             return render_template("events/event-template.html", event_data=event, formatted_description=formatted_description)
@@ -206,25 +206,10 @@ def edit_event_specific(event_name):
     if "username" in session:
         event = None
         for e in maggie.events:
-            if e.name.replace(" ", "-") == event_name:
+            if e.name.replace(" ", "-").replace("/","&") == event_name:
                 event = e
                 time_formatted = ""
                 date_formatted = ""
-                """if "pm" in event.time.lower():
-                    if int(event.time[0:-2].split(":")[0]) != 12:
-                        hour = str(int(event.time[0:-2].split(":")[0]) + 12)
-                    else: 
-                        hour = "12"
-                    minute = event.time[0:-2].split(":")[1]
-                    time_formatted = hour + ":" + minute
-                else:
-                    if int(event.time[0:-2].split(":")[0]) == 12:
-                        hour = "00"
-                    else:
-                        hour = event.time[0:-2].split(":")[0]
-                    minute = event.time[0:-2].split(":")[1]
-                    time_formatted = hour + ":" + minute"""
-                
                 hour = int(event.time[0:-2].split(":")[0])
                 minute = int(event.time[0:-2].split(":")[1])
                 if "pm" in event.time.lower():
@@ -258,7 +243,7 @@ def edit_event_delete(original_event_name):
     if "username" in session:
         if request.method == "POST":
             for event in maggie.events:
-                if event.name.replace(" ", "-") == original_event_name:
+                if event.name.replace(" ", "-").replace("/", "&") == original_event_name:
                     maggie.events.remove(event)
                     maggie.update_files()
                     return redirect("/admin/dashboard")
@@ -288,7 +273,7 @@ def edit_event_process(original_event_name):
             new_month = int(new_date.split("-")[1])
             new_day = int(new_date.split("-")[2])
             for event in maggie.events:
-                if event.name.replace(" ", "-") == original_event_name:
+                if event.name.replace(" ", "-").replace("/", "&") == original_event_name:
                     event.name = new_name
                     event.description = new_description
                     event.date = str(new_month) + "/" + str(new_day) + "/" + str(new_year)
@@ -347,7 +332,7 @@ def edit_announcement():
 def edit_announcement_specific(original_announcement_name):
     if "username" in session:
         for announcement in herald.announcements:
-            if announcement.title.replace(" ", "-") == original_announcement_name:
+            if announcement.title.replace(" ", "-").replace("/", "&") == original_announcement_name:
                 formatted_content = convert(announcement.content)
                 return render_template("edit_announcement_specific.html", announcement=announcement, formatted_content=formatted_content)
     return redirect("/")
@@ -357,7 +342,7 @@ def edit_announcement_delete(original_announcement_name):
     if "username" in session:
         if request.method == "POST":
             for announcement in herald.announcements:
-                if announcement.title.replace(" ", "-") == original_announcement_name:
+                if announcement.title.replace(" ", "-").replace("/", "&") == original_announcement_name:
                     herald.announcements.remove(announcement)
                     herald.update_files()
                     return redirect("/admin/dashboard")
@@ -390,7 +375,7 @@ def edit_announcement_process(original_announcement_name):
                 new_minutes = str(new_minutes)
             new_user = session["username"]
             for announcement in herald.announcements:
-                if announcement.title.replace(" ", "-") == original_announcement_name:
+                if announcement.title.replace(" ", "-").replace("/", "&") == original_announcement_name:
                     announcement.title = new_title
                     announcement.content = new_content
                     announcement.date =str(new_month) + "/" + str(new_day) + "/" + str(new_year)

@@ -32,7 +32,7 @@
                 {% if i % 2 == 0 %}
                 <div class="event-row">
                 {% endif %}
-                    <a class="undecorated-link" href="/admin/edit-event/{{ events[i].name | replace(' ', '-') }}">
+                    <a class="undecorated-link" href="/admin/edit-event/{{ events[i].name | replace(' ', '-') | replace('/','&') }}">
                     <div class="event">
                         <div class="event-row-content">
                             <h1>{{ events[i].name }}</h1>
