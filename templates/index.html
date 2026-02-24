@@ -8,7 +8,7 @@
     </head>
     <body>
         <div class="header">
-            <h1>Phi Sigma Phi at Virginia Tech</h1>
+            <h1>PSP at Virginia Tech</h1>
         </div>
         <div class="linkrow">
             <div><a href="/">Home</a></div>
@@ -20,9 +20,19 @@
         <div class="mainarea">
             <div class="horizontal-row-flex">
                 <div class="calendar">
-                    {% if month_name %}
-                    <h1>{{ month_name }} </h1>
-                    {% endif %}
+                    <div class="flex flexrow flexbetween">
+                        {% if month_name %}
+                        <h1>{{ month_name }} </h1>
+                        {% endif %}
+                        <div class="flex flexrow flexcenter">
+                            <form action="/calendar/{{ prev_month }}">
+                                <button type="submit" class="arrowbutton"><</button>
+                            </form>
+                            <form action="/calendar/{{ next_month }}">
+                                <button type="submit" class="arrowbutton">></button>
+                            </form>
+                        </div>
+                    </div>
                     <div class="days-container">
                         {% if day_count != None and first_of_month != None and events != None %}
                         {% for day in range(day_count + first_of_month) %}
@@ -58,8 +68,20 @@
                                     {% for event in events[day - first_of_month] %}
                                     <a class="undecorated-link" href="/events/{{ event.name | replace(' ', '-') | replace('/', '&') }}">
                                     <div class="calendar-event">
-                                        <p><strong>{{ event.time }}</strong></p>
-                                        <p>{{ event.name }}</p>
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <p><strong>{{ event.time }}</strong></p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <p>{{ event.name }}</p>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                     </a>
                                     {% endfor %}
@@ -95,14 +117,14 @@
         <div class="footer"></div>
         <script>
             var days = document.getElementsByClassName("day");
-            var max_size = 0;
+            var min_size = days[0].offsetWidth;
             for (let i = 0; i < days.length; i++) {
-                if (days[i].offsetWidth > max_size) {
-                    max_size = days[i].offsetWidth;
+                if (days[i].offsetWidth < min_size) {
+                    min_size = days[i].offsetWidth;
                 }
             }
             for (let i = 0; i < days.length; i++) {
-                days[i].style.width = max_size + "px";
+                days[i].style.width = min_size + "px";
             }
         </script>
     </body>

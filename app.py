@@ -1,14 +1,15 @@
-from flask import Flask, render_template, request, session, redirect
-from html_to_markdown import convert
+import calendar
+import datetime
+
 import markdown
+from flask import Flask, redirect, render_template, request, session
+from html_to_markdown import convert
 
-import datetime, calendar
-
-from Maggie import Maggie
-from Herald import Herald
+from Announcement import Announcement
 from configmanager import ConfigManager
 from Event import Event
-from Announcement import Announcement
+from Herald import Herald
+from Maggie import Maggie
 
 app = Flask(__name__)
 app.secret_key = ConfigManager("key.cfg").get_key()
@@ -19,15 +20,27 @@ for i in range(len(users)):
 maggie = Maggie("./data/events.json")
 herald = Herald("./data/announcements.json")
 
+
 @app.route("/")
 def index():
+    month_num = datetime.datetime.now().month
+    prev_month_num = month_num - 1
+    next_month_num = month_num + 1
+    if prev_month_num == 0:
+        prev_month_num = 12
+    if next_month_num == 13:
+        next_month_num = 1
     ## CALCULATE CALENDAR STRUCTURE - days & month & which day the month starts on
-    calendar_monthrange = calendar.monthrange(datetime.datetime.now().year, datetime.datetime.now().month) # returns a tuple
-    first_day_of_month = calendar_monthrange[0] # Calendar.<CONSTANT IN ALL CAPS> use a switch statement
-    number_of_days = calendar_monthrange[1] # just a number
+    calendar_monthrange = calendar.monthrange(
+        datetime.datetime.now().year, datetime.datetime.now().month
+    )  # returns a tuple
+    first_day_of_month = calendar_monthrange[
+        0
+    ]  # Calendar.<CONSTANT IN ALL CAPS> use a switch statement
+    number_of_days = calendar_monthrange[1]  # just a number
 
     first_day_of_month_number = 0
-    match (first_day_of_month):
+    match first_day_of_month:
         case calendar.SUNDAY:
             first_day_of_month_number = 0
         case calendar.MONDAY:
@@ -51,27 +64,57 @@ def index():
         if int(event.get_date_month()) == int(datetime.datetime.now().month):
             print(int(event.get_date_day()) - 1)
             events[int(event.get_date_day()) - 1].append(event)
-    
-    announcements = herald.announcements.copy()
-    announcements.sort(key=lambda x: str(x.date)+str(x.time), reverse=True)
 
-    return render_template("index.html", 
-                           first_of_month=first_day_of_month_number, 
-                           day_count=number_of_days, 
-                           month_name=calendar.month_name[datetime.datetime.now().month],
-                           events=events,
-                           announcements=announcements
-                           )
+    announcements = herald.announcements.copy()
+    announcements.sort(key=lambda x: str(x.date) + str(x.time), reverse=True)
+
+    return render_template(
+        "index.html",
+        first_of_month=first_day_of_month_number,
+        day_count=number_of_days,
+        month_name=calendar.month_name[month_num],
+        prev_month=calendar.month_name[prev_month_num],
+        next_month=calendar.month_name[next_month_num],
+        events=events,
+        announcements=announcements,
+    )
+
 
 @app.route("/calendar")
 def calendar_view():
+    print("Calendar")
+    return redirect(
+        "/calendar/" + str(calendar.month_name[datetime.datetime.now().month])
+    )
+
+
+@app.route("/calendar/<month_name>")
+def calendar_view_specific(month_name):
+    month_num = 0
+    for i in range(len(calendar.month_name)):
+        if calendar.month_name[i] == month_name:
+            month_num = i
+            break
+    print(month_num)
+    prev_month_num = month_num - 1
+    next_month_num = month_num + 1
+    if prev_month_num == 0:
+        prev_month_num = 12
+    if next_month_num == 13:
+        next_month_num = 1
     ## CALCULATE CALENDAR STRUCTURE - days & month & which day the month starts on
-    calendar_monthrange = calendar.monthrange(datetime.datetime.now().year, datetime.datetime.now().month) # returns a tuple
-    first_day_of_month = calendar_monthrange[0] # Calendar.<CONSTANT IN ALL CAPS> use a switch statement
-    number_of_days = calendar_monthrange[1] # just a number
+    calendar_monthrange = calendar.monthrange(
+        datetime.datetime.now().year, month_num
+    )  # returns a tuple
+    first_day_of_month = calendar_monthrange[
+        0
+    ]  # Calendar.<CONSTANT IN ALL CAPS> use a switch statement
+    print(calendar_monthrange)
+    number_of_days = calendar_monthrange[1]  # just a number
+    print(number_of_days)
 
     first_day_of_month_number = 0
-    match (first_day_of_month):
+    match first_day_of_month:
         case calendar.SUNDAY:
             first_day_of_month_number = 0
         case calendar.MONDAY:
@@ -92,37 +135,49 @@ def calendar_view():
     for i in range(number_of_days):
         events.append([])
     for event in maggie.events:
-        if int(event.get_date_month()) == int(datetime.datetime.now().month):
-            print(int(event.get_date_day()) - 1)
+        if int(event.get_date_month()) == int(month_num):
+            print("Month: " + str(calendar.month_name[month_num]))
+            print("Date: " + str(int(event.get_date_day()) - 1))
             events[int(event.get_date_day()) - 1].append(event)
-    return render_template("calendar.html", 
-                           first_of_month=first_day_of_month_number, 
-                           day_count=number_of_days, 
-                           month_name=calendar.month_name[datetime.datetime.now().month],
-                           events=events
-                        )
+    return render_template(
+        "calendar.html",
+        first_of_month=first_day_of_month_number,
+        day_count=number_of_days,
+        month_name=calendar.month_name[month_num],
+        prev_month=calendar.month_name[prev_month_num],
+        next_month=calendar.month_name[next_month_num],
+        events=events,
+    )
+
 
 @app.route("/announcements")
 def announcements():
     announcements = herald.announcements.copy()
-    announcements.sort(key=lambda x: str(x.date)+str(x.time), reverse=True)
+    announcements.sort(key=lambda x: str(x.date) + str(x.time), reverse=True)
     return render_template("announcements.html", announcements=announcements)
+
 
 @app.route("/events")
 def events_view():
     events = maggie.events.copy()
     events.sort(key=lambda x: str(x.date) + str(x.time), reverse=True)
-    return render_template("events.html", events = events)
+    return render_template("events.html", events=events)
+
 
 @app.route("/events/<event_name>")
 def event_render(event_name):
     event = None
     for e in maggie.events:
-        if e.name.replace(" ", "-").replace("/","&") == event_name:
+        if e.name.replace(" ", "-").replace("/", "&") == event_name:
             event = e
             formatted_description = markdown.markdown(event.description)
-            return render_template("events/event-template.html", event_data=event, formatted_description=formatted_description)
+            return render_template(
+                "events/event-template.html",
+                event_data=event,
+                formatted_description=formatted_description,
+            )
     return redirect("/")
+
 
 @app.route("/admin")
 def admin_login():
@@ -131,6 +186,7 @@ def admin_login():
     if "error" not in session:
         session["error"] = False
     return render_template("login.html", failure=session["error"])
+
 
 @app.route("/admin/verification", methods=["GET", "POST"])
 def admin_verification():
@@ -146,22 +202,26 @@ def admin_verification():
     session["error"] = True
     return redirect("/admin", code=302)
 
+
 @app.route("/admin/dashboard")
 def admin_dashboard():
     if "username" in session:
         return render_template("dashboard.html", username=session["username"])
     return redirect("/", code=302)
 
+
 @app.route("/admin/logout")
 def admin_logout():
     session.pop("username", None)
     return redirect("/")
+
 
 @app.route("/admin/create-event")
 def create_event():
     if "username" in session:
         return render_template("create_event.html")
     return redirect("/")
+
 
 @app.route("/admin/create-event/process", methods=["GET", "POST"])
 def create_event_process():
@@ -183,11 +243,21 @@ def create_event_process():
                 mode = "PM"
                 hour -= 12
             if hour == 0:
-                    hour = 12
+                hour = 12
             year = int(date.split("-")[0])
             month = int(date.split("-")[1])
             day = int(date.split("-")[2])
-            maggie.add_event(Event(name, description, str(month)+"/"+str(day)+"/"+str(year), str(hour)+":"+str(minute)+str(mode), point_kind, attendance_before, attendance_after))
+            maggie.add_event(
+                Event(
+                    name,
+                    description,
+                    str(month) + "/" + str(day) + "/" + str(year),
+                    str(hour) + ":" + str(minute) + str(mode),
+                    point_kind,
+                    attendance_before,
+                    attendance_after,
+                )
+            )
             return redirect("/admin/dashboard", code=302)
         return redirect("/admin/dashboard", code=302)
     return redirect("/")
@@ -201,12 +271,13 @@ def edit_event():
         return render_template("edit_event.html", events=events)
     return redirect("/")
 
+
 @app.route("/admin/edit-event/<event_name>")
 def edit_event_specific(event_name):
     if "username" in session:
         event = None
         for e in maggie.events:
-            if e.name.replace(" ", "-").replace("/","&") == event_name:
+            if e.name.replace(" ", "-").replace("/", "&") == event_name:
                 event = e
                 time_formatted = ""
                 date_formatted = ""
@@ -217,40 +288,51 @@ def edit_event_specific(event_name):
                 hour %= 24
 
                 if hour < 10:
-                    time_formatted+="0"
-                time_formatted+=str(hour)+":"
+                    time_formatted += "0"
+                time_formatted += str(hour) + ":"
                 if minute < 10:
                     time_formatted += "0"
-                time_formatted+=str(minute)
+                time_formatted += str(minute)
 
                 print(time_formatted)
                 day = event.date.split("/")[1]
                 month = event.date.split("/")[0]
                 year = event.date.split("/")[2]
-                if int( month) < 10:
+                if int(month) < 10:
                     month = "0" + month
                 if int(day) < 10:
                     day = "0" + day
-                
+
                 date_formatted = year + "-" + month + "-" + day
 
-                return render_template("edit_event_specific.html", event_data=event, description_formatted=convert(event.description), time_formatted=time_formatted, date_formatted=date_formatted)
+                return render_template(
+                    "edit_event_specific.html",
+                    event_data=event,
+                    description_formatted=convert(event.description),
+                    time_formatted=time_formatted,
+                    date_formatted=date_formatted,
+                )
         return redirect("/admin/dashboard")
     return redirect("/")
 
-@app.route("/admin/edit-event/<original_event_name>/delete", methods=["GET","POST"])
+
+@app.route("/admin/edit-event/<original_event_name>/delete", methods=["GET", "POST"])
 def edit_event_delete(original_event_name):
     if "username" in session:
         if request.method == "POST":
             for event in maggie.events:
-                if event.name.replace(" ", "-").replace("/", "&") == original_event_name:
+                if (
+                    event.name.replace(" ", "-").replace("/", "&")
+                    == original_event_name
+                ):
                     maggie.events.remove(event)
                     maggie.update_files()
                     return redirect("/admin/dashboard")
         return redirect("/admin/dashboard")
-    return redirect("/")    
+    return redirect("/")
 
-@app.route("/admin/edit-event/<original_event_name>/process", methods=["GET","POST"])
+
+@app.route("/admin/edit-event/<original_event_name>/process", methods=["GET", "POST"])
 def edit_event_process(original_event_name):
     if "username" in session:
         if request.method == "POST":
@@ -268,29 +350,36 @@ def edit_event_process(original_event_name):
                 new_mode = "PM"
                 new_hour -= 12
             if new_hour == 0:
-                    new_hour = 12
+                new_hour = 12
             new_year = int(new_date.split("-")[0])
             new_month = int(new_date.split("-")[1])
             new_day = int(new_date.split("-")[2])
             for event in maggie.events:
-                if event.name.replace(" ", "-").replace("/", "&") == original_event_name:
+                if (
+                    event.name.replace(" ", "-").replace("/", "&")
+                    == original_event_name
+                ):
                     event.name = new_name
                     event.description = new_description
-                    event.date = str(new_month) + "/" + str(new_day) + "/" + str(new_year)
+                    event.date = (
+                        str(new_month) + "/" + str(new_day) + "/" + str(new_year)
+                    )
                     event.time = str(new_hour) + ":" + str(new_minute) + str(new_mode)
                     event.point_kind = new_point_kind
                     print(event)
                     maggie.update_files()
                     return redirect("/admin/dashboard")
-                
+
         return redirect("/admin/dashboard")
     return redirect("/")
+
 
 @app.route("/admin/create-announcement")
 def create_announcement():
     if "username" in session:
         return render_template("create_announcement.html")
     return redirect("/")
+
 
 @app.route("/admin/create-announcement/process", methods=["GET", "POST"])
 def create_announcement_process():
@@ -311,45 +400,75 @@ def create_announcement_process():
                 mode = "PM"
                 hour -= 12
             if hour == 0:
-                    hour = 12
+                hour = 12
             if minutes < 10:
                 minutes = "0" + str(minutes)
             else:
                 minutes = str(minutes)
             user = session["username"]
-            herald.add_announcement(Announcement(title, description, str(month) + "/" + str(day) + "/" + str(year), str(hour) + ":" + str(minutes) + str(mode), str(user)))
+            herald.add_announcement(
+                Announcement(
+                    title,
+                    description,
+                    str(month) + "/" + str(day) + "/" + str(year),
+                    str(hour) + ":" + str(minutes) + str(mode),
+                    str(user),
+                )
+            )
             return redirect("/admin/dashboard")
         return redirect("/admin/dashboard")
     return redirect("/")
 
+
 @app.route("/admin/edit-announcement")
 def edit_announcement():
     if "username" in session:
-        return render_template("edit_announcement.html", announcements=herald.announcements.copy())
+        return render_template(
+            "edit_announcement.html", announcements=herald.announcements.copy()
+        )
     return redirect("/")
+
 
 @app.route("/admin/edit-announcement/<original_announcement_name>")
 def edit_announcement_specific(original_announcement_name):
     if "username" in session:
         for announcement in herald.announcements:
-            if announcement.title.replace(" ", "-").replace("/", "&") == original_announcement_name:
+            if (
+                announcement.title.replace(" ", "-").replace("/", "&")
+                == original_announcement_name
+            ):
                 formatted_content = convert(announcement.content)
-                return render_template("edit_announcement_specific.html", announcement=announcement, formatted_content=formatted_content)
+                return render_template(
+                    "edit_announcement_specific.html",
+                    announcement=announcement,
+                    formatted_content=formatted_content,
+                )
     return redirect("/")
 
-@app.route("/admin/edit-announcement/<original_announcement_name>/delete", methods=["GET","POST"])
+
+@app.route(
+    "/admin/edit-announcement/<original_announcement_name>/delete",
+    methods=["GET", "POST"],
+)
 def edit_announcement_delete(original_announcement_name):
     if "username" in session:
         if request.method == "POST":
             for announcement in herald.announcements:
-                if announcement.title.replace(" ", "-").replace("/", "&") == original_announcement_name:
+                if (
+                    announcement.title.replace(" ", "-").replace("/", "&")
+                    == original_announcement_name
+                ):
                     herald.announcements.remove(announcement)
                     herald.update_files()
                     return redirect("/admin/dashboard")
         return redirect("/admin/dashboard")
-    return redirect("/")  
+    return redirect("/")
 
-@app.route("/admin/edit-announcement/<original_announcement_name>/process", methods=["GET","POST"])
+
+@app.route(
+    "/admin/edit-announcement/<original_announcement_name>/process",
+    methods=["GET", "POST"],
+)
 def edit_announcement_process(original_announcement_name):
     if "username" in session:
         if request.method == "POST":
@@ -368,23 +487,31 @@ def edit_announcement_process(original_announcement_name):
                 new_mode = "PM"
                 new_hour -= 12
             if new_hour == 0:
-                    new_hour = 12
+                new_hour = 12
             if new_minutes < 10:
                 new_minutes = "0" + str(new_minutes)
             else:
                 new_minutes = str(new_minutes)
             new_user = session["username"]
             for announcement in herald.announcements:
-                if announcement.title.replace(" ", "-").replace("/", "&") == original_announcement_name:
+                if (
+                    announcement.title.replace(" ", "-").replace("/", "&")
+                    == original_announcement_name
+                ):
                     announcement.title = new_title
                     announcement.content = new_content
-                    announcement.date =str(new_month) + "/" + str(new_day) + "/" + str(new_year)
-                    announcement.time = str(new_hour) + ":" + str(new_minutes) + str(new_mode)
+                    announcement.date = (
+                        str(new_month) + "/" + str(new_day) + "/" + str(new_year)
+                    )
+                    announcement.time = (
+                        str(new_hour) + ":" + str(new_minutes) + str(new_mode)
+                    )
                     announcement.user = new_user
                     herald.update_files()
                     return redirect("/admin/dashboard")
         return redirect("/admin/dashboard")
     return redirect("/")
+
 
 @app.route("/admin/create-user")
 def create_user():
@@ -392,7 +519,8 @@ def create_user():
         return render_template("create_user.html")
     return redirect("/")
 
-@app.route("/admin/create-user/process", methods=["GET","POST"])
+
+@app.route("/admin/create-user/process", methods=["GET", "POST"])
 def create_user_process():
     if "username" in session:
         if request.method == "POST":
@@ -407,12 +535,14 @@ def create_user_process():
         return redirect("/admin/dashboard")
     return redirect("/")
 
+
 @app.route("/admin/edit-user")
 def edit_user():
     if "username" in session:
         global users
         return render_template("edit_user.html", users=users[0:-1])
     return redirect("/")
+
 
 @app.route("/admin/edit-user/<username>")
 def edit_user_specific(username):
@@ -422,6 +552,7 @@ def edit_user_specific(username):
             if user[0] == username:
                 return render_template("edit_user_specific.html", user=user)
     return redirect("/")
+
 
 @app.route("/admin/edit-user/<username>/process", methods=["GET", "POST"])
 def edit_user_process(username):
@@ -436,7 +567,7 @@ def edit_user_process(username):
                         user[2] = int(request.form["mode"])
             with open("./data/users.cfg", "w") as f:
                 for user in users:
-                    if user[0] != '':
+                    if user[0] != "":
                         f.write(str(user[0]))
                         f.write(",")
                         f.write(str(user[1]))

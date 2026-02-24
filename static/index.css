@@ -72,7 +72,6 @@ body {
     margin: 0px;
 }
 
-
 .day-header {
     display: flex;
     flex-direction: row;
@@ -96,7 +95,6 @@ body {
     padding: 0px 2px;
     margin-bottom: 4px;
 }
-
 
 .announcements {
     display: flex;
@@ -130,4 +128,36 @@ body {
 
 .announcement h2 {
     text-align: center;
+}
+
+.flex {
+    display: flex;
+}
+
+.flexrow {
+    flex-direction: row;
+}
+
+.flexcol {
+    flex-direction: column;
+}
+
+.flexstart {
+    justify-content: start;
+}
+
+.flexevenly {
+    justify-content: space-evenly;
+}
+
+.flexbetween {
+    justify-content: space-between;
+}
+
+.flexaround {
+    justify-content: space-around;
+}
+
+.arrowbutton {
+    font-size: 30px;
 }
