@@ -1,5 +1,5 @@
 import json
-from Event import Event
+from DataTypes.Event import Event
 
 # It's called Maggie because she's an events and experience management major
 class Maggie(object):

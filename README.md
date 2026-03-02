@@ -1,6 +1,11 @@
 # psp-website
 This is the repository for the code that will run on an AWS instance for my local chapter of Phi Sigma Pi.
 
+## How to Set Up the Server
+
+In order to run on the server use `ServerSetup/CreateDataFiles.py` to build the data folder and set the session key.
+
+
 ## Changelog
 
 ### Version 1

@@ -1,6 +1,6 @@
 import json
 
-from Announcement import Announcement
+from DataTypes.Announcement import Announcement
 
 # It's called Herald because he's the guy with announcements
 class Herald(object):
